@@ -2,11 +2,13 @@ package io.example.todoapp;
 
 import static java.security.AccessController.getContext;
 
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -17,10 +19,12 @@ import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
     private List<Model> todoList;
+    private OnTaskChangedListener listener;
 
 
-    public Adapter(List<Model> todoList){
+    public Adapter(List<Model> todoList,OnTaskChangedListener listener){
         this.todoList = todoList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -31,6 +35,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view,parent,false);
         return new ViewHolder(itemView);
 
+
+    }public interface OnTaskChangedListener {
+        void onTaskChanged();
     }
 
     @Override
@@ -48,8 +55,27 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
                     todoList.remove(pos);
                     notifyItemRemoved(pos);
                     notifyItemRangeChanged(pos, todoList.size());
+                    listener.onTaskChanged();
                 }
 
+            }
+        });
+        holder.isChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                if (isChecked) {
+                    holder.todoName.setPaintFlags(
+                            holder.todoName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+                    );
+                } else {
+                    holder.todoName.setPaintFlags(
+                            holder.todoName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
+                    );
+                }
+                todo.setCompleted(isChecked);
+                listener.onTaskChanged();
             }
         });
     }

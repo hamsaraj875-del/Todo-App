@@ -16,6 +16,11 @@ public class Model {
     public String getTodoName(){
         return todoName;
     }
+    public void setCompleted(Boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+
+
 
     public Boolean getIsCompleted(){
         return isCompleted;

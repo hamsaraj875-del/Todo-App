@@ -2,8 +2,11 @@ package io.example.todoapp;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.core.splashscreen.SplashScreen;
 
@@ -16,13 +19,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Adapter.OnTaskChangedListener {
 
     RecyclerView recyclerView;
     EditText editText;
     Adapter adapter;
     ImageButton send;
+    ProgressBar progressBar;
+    TextView progress;
+    ArrayList<Model> todoList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,18 +38,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.recyclerView);
+        progressBar = findViewById(R.id.progressBar);
+        progress = findViewById(R.id.progress);
 
-        ArrayList<Model> todoList = new ArrayList<>();
-
-        todoList.add(new Model("Fresh up",false));
         todoList.add(new Model("Breakfast",false));
-        todoList.add(new Model("Class",false));
-        todoList.add(new Model("Launch",false));
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        updateProgress(todoList);
 
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new Adapter(todoList);
+        adapter = new Adapter(todoList,this);
         recyclerView.setAdapter(adapter);
 
 
@@ -57,8 +61,32 @@ public class MainActivity extends AppCompatActivity {
                     todoList.add(new Model(editText.getText().toString(),false));
                     editText.setText("");
                     adapter.notifyItemInserted(todoList.size() - 1);
+                    updateProgress(todoList);
                 }
             }
         });
+
+    }
+    public void updateProgress(List<Model> todoList){
+        if(todoList.size() == 0){
+            progressBar.setProgress(0);
+            progress.setText("0%");
+        }
+        else{
+            int count = 0;
+            for(Model item:todoList){
+                if(item.getIsCompleted()){
+                    count++;
+                }
+            }
+            int perc = (count*100)/todoList.size();
+            progressBar.setProgress(perc);
+            progress.setText(String.valueOf(perc)+"%");
+        }
+    }
+
+    @Override
+    public void onTaskChanged() {
+        updateProgress(todoList);
     }
 }
