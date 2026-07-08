@@ -9,7 +9,6 @@
     android:background="@drawable/background"
     tools:context=".MainActivity">
 
-    <!-- Heading -->
 
     <TextView
         android:id="@+id/head"
@@ -25,7 +24,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!-- Progress Label -->
 
     <TextView
         android:id="@+id/textView"
@@ -40,7 +38,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/head"/>
 
-    <!-- Progress Percentage -->
 
     <TextView
         android:id="@+id/progress"
@@ -53,8 +50,6 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/textView"
         app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- Progress Bar -->
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -72,7 +67,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView"/>
 
-    <!-- Todo List -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -88,7 +82,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Bottom Input Card -->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/inputCard"
